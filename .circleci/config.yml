@@ -3,18 +3,24 @@ jobs:
   build:
     docker:
       - image: rocker/tidyverse:3.5.2
+
     steps:
       - checkout
+
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "DESCRIPTION" }}
             - v1-dependencies-
+
       - run:
+          # Make sure that devtools is installed. This should be done by the image, so
+          # this should never fail
           name: check devtools
           command: |
             if ! Rscript -e 'if (!("devtools" %in% rownames(installed.packages()))) q(status=1)'; then
               exit 1
             fi
+
       - run:
           name: install dependencies
           command: Rscript -e "library(devtools); library(methods); options(repos=c(CRAN='http://cran.rstudio.com/')); install_deps(dependencies = TRUE)"
