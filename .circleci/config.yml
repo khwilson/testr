@@ -17,7 +17,7 @@ jobs:
             fi
       - run:
           name: install dependencies
-          command: Rscript -e "library(detools); library(methods); options(repos=c(CRAN='http://cran.rstudio.com/')); install_deps(dependencies = TRUE)"
+          command: Rscript -e "library(devtools); library(methods); options(repos=c(CRAN='http://cran.rstudio.com/')); install_deps(dependencies = TRUE)"
 
       - run:
           name: build
