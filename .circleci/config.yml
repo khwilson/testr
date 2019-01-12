@@ -26,7 +26,7 @@ jobs:
       - run:
           name: check
           command: |
-            FILE=$(ls -1t *.tar.gz | hean -n 1)
+            FILE=$(ls -1t *.tar.gz | head -n 1)
             R CMD check "$FILE" --no-build-vignettes --no-manual --as-cran
 
 workflows:
