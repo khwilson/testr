@@ -12,7 +12,7 @@ jobs:
       - run:
           name: check devtools
           command: |
-            if ! Rscript -e 'if (!("devtools" %in% rownmaes(installed.packages()))) q(status=1)'; then
+            if ! Rscript -e 'if (!("devtools" %in% rownames(installed.packages()))) q(status=1)'; then
               exit 1
             fi
       - run:
