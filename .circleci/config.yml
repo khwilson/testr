@@ -1,0 +1,36 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: rocker/tidyverse:3.5.2
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "DESCRIPTION" }}
+            - v1-dependencies-
+      - run:
+          name: check devtools
+          command: |
+            if ! Rscript -e 'if (!("devtools" %in% rownmaes(installed.packages()))) q(status=1)'; then
+              exit 1
+            fi
+      - run:
+          name: install dependencies
+          command: Rscript -e "library(detools); library(methods); options(repos=c(CRAN='http://cran.rstudio.com/')); install_deps(dependencies = TRUE)"
+
+      - run:
+          name: build
+          command: R CMD build --no-build-vignettes --no-manual .
+
+      - run:
+          name: check
+          command: |
+            FILE=$(ls -1t *.tar.gz | hean -n 1)
+            R CMD check "$FILE" --no-build-vignettes --no-manual --as-cran
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
